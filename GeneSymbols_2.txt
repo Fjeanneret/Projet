@@ -1,0 +1,12 @@
+RAD51,homo_sapiens
+DMD,mus_musculus
+CDH2,gallus_gallus
+TP53,danio_rerio
+RAD51,pan_troglodytes
+PSBA,pinus_thunbergii
+RPL33,pteridium_aquilinum
+PHYB,arabidopsis_thaliana
+SFA1,saccharomyces_cerevisiae
+SLPA,lactobacillus_acidophilus
+DRGX,pelodiscus_sinensis
+NOTCH1,xenopus_tropicalis
