@@ -3,10 +3,6 @@ import requests, sys
 GeneSymbols = []
 Species=[]
 ID_ENSG=[]
-'''
-fichier = open("GeneSymbols.txt")
-lignes = fichier.readlines()
-print(lignes)'''
 
 with open("GeneSymbols.txt") as f:
     lines = f.read().splitlines() 
@@ -21,7 +17,6 @@ for line in lines:
 i = 0
 
 while i < len(GeneSymbols):
-
 
 	server = "https://rest.ensembl.org"
 	#ext = "/xrefs/symbol/homo_sapiens/BRCA2?"
