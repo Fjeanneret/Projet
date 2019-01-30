@@ -4,49 +4,102 @@
 	
 #main^
 
-import requests, sys
+import requests
 
-def geneID(GeneSymbols,Species):
-	
+def geneID_fetch(GeneSymbols,Species):
+	ensembl_server = None 
+	ID_ENSG=[]
 	server = "https://rest.ensembl.org"
-	#ext = "/xrefs/symbol/homo_sapiens/BRCA2?"
 	ext = "/xrefs/symbol/{}/{}".format(Species,GeneSymbols)
 	r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
-	 
+	ensembl_server = True
+
 	if not r.ok:
+		ensembl_server = False
 		server = "https://rest.ensemblgenomes.org"
-		ext = "/xrefs/symbol/{}/{}?".format(Species,GeneSymbols)
 		r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
-		
-	  #r.raise_for_status()
-	  #sys.exit()
 	
 	decoded = r.json()
-	#gerer les plusieurs noms??
-	ID_ENSG=[]
-	j=0
-	#si len(decoded)>1 ? faire .join ?  
-	while j<len(decoded):
-		
-		ID_ENSG.append(decoded[j]["id"])
-		#ecrire dans fichier plutot ?
-		
-		j+=1
 	
+	i=0  
+	while i<len(decoded):
+		#ecrire dans fichier à la place
+		ID_ENSG.append(decoded[i]["id"])		
+		i+=1
+		
 	print(ID_ENSG)
 
+	#gerer si plant,fungi...
 
-geneID("BRCA2","homo_sapiens")
-	#pour chaque element de Gene_id construire url
-#main : ???
-'''
-def RNA_ID():
+	#Orthologs fetching
+	j=0
+	while j <len(ID_ENSG):
+
+		if ensembl_server == True:
+			geneSummary_url = "https://www.ensembl.org/{}/Gene/Summary?db=core;g={};".format(Species,ID_ENSG[j])
+			ortholog_url = "https://www.ensembl.org/{}/Location/View?db=core;g={};".format(Species,ID_ENSG[j])
+		else: 
+			serverIndex=0
+			serversList = ["plants","fungi","Bacteria","Protists","Metazoa"]
+			ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(serversList[serverIndex],Species, ID_ENSG[j])
+			r = requests.get(ortholog_url, headers={ "Content-Type" : "application/json"})
+			print("plant")
+
+			if not r.ok:
+				serverIndex +=1
+				ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(serversList[serverIndex],Species, ID_ENSG[j])
+				r = requests.get(ortholog_url, headers={ "Content-Type" : "application/json"})
+				
+				print("fungi")
+				if not r.ok:
+					serverIndex +=1					
+					ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(serversList[serverIndex],Species, ID_ENSG[j])
+					r = requests.get(ortholog_url, headers={ "Content-Type" : "application/json"})
+					
+					print("Protists")
+					if not r.ok:
+						erverIndex +=1	
+						ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(serversList[serverIndex],Species, ID_ENSG[j])
+						r = requests.get(ortholog_url, headers={ "Content-Type" : "application/json"})
+						
+						print("Bacteria")
+						if not r.ok:
+							erverIndex +=1	
+							ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(serversList[serverIndex],Species, ID_ENSG[j])
+							r = requests.get(ortholog_url, headers={ "Content-Type" : "application/json"})
+							print("Metazoa")
+			geneSummary_url = "http://{}.ensembl.org/{}/Gene/Summary?g={};".format(serversList[serverIndex], Species, ID_ENSG[j])
+		print(ortholog_url,"\n",geneSummary_url)
+		j+=1
+
+	return ID_ENSG
+
+
+def TranscriptID_ProtID_fetch(ID):
+
+	server = "https://rest.ensembl.org"
+	ext = "/lookup/id/{}?expand=1".format(ID)
+	print("Recherche dans ensembl...")
+	r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
+
+	if not r.ok:
+		print("Recherche dans ensemblgenomes...")
+		server = "https://rest.ensemblgenomes.org"
+		r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
 	
+	decoded = r.json()
 
-def PROT_name():
+	i=0
+	for transcript in decoded["Transcript"]:
+		
+		if decoded["Transcript"][i]["biotype"]=="protein_coding":
+			print("ARN : ",decoded["Transcript"][i]["id"])
+			print("Proteine : ",decoded["Transcript"][i]["Translation"]["id"])
+		i=i+1
+
+
+#def PROT_name():
 	
-'''
-
 
 #ncbi  ??? https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=brca2
 
