@@ -2,18 +2,19 @@ import requests, sys
 
 GeneSymbols = []
 Species=[]
+<<<<<<< HEAD
 Gene_ID=[]
 '''
 fichier = open("GeneSymbols.txt")
 lignes = fichier.readlines()
 print(lignes)'''
+=======
+ID_ENSG=[]
+>>>>>>> 3dbfe018df2cb5ed285a648ab6469e885c902723
 
 with open("GeneSymbols.txt") as f:
     lines = f.read().splitlines() 
 
-
-#voir pour asso nom du gne et espce sinon doublon 
-#un dictio avec cles / entrees pour a puis autres pour data ?
 for line in lines:
 	line = line.replace(" ", "_") #penser a gerer l'espace a la fin du premier Homo_sapiens
 	GeneSymbolAndSpecie =  line.split("\t")
@@ -24,7 +25,6 @@ for line in lines:
 i = 0
 
 while i < 1:
-
 
 	server = "https://rest.ensembl.org"
 	#ext = "/xrefs/symbol/homo_sapiens/BRCA2?"
@@ -49,6 +49,7 @@ while i < 1:
 		j+=1
 	i+=1
 	
+<<<<<<< HEAD
 	
 	
 print(ID_ENSG)
@@ -96,3 +97,6 @@ prendre type en amont ?
 
 '''
 
+=======
+print(ID_ENSG)
+>>>>>>> 3dbfe018df2cb5ed285a648ab6469e885c902723
