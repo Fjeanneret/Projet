@@ -96,15 +96,9 @@ def TranscriptID_ProtID_fetch(ID):
 			print("ARN : ",decoded["Transcript"][i]["id"])
 			print("Proteine : ",decoded["Transcript"][i]["Translation"]["id"])
 		i=i+1
+	#liens des transcripts : http://www.ensembl.org/Homo_sapiens/Transcript/ProteinSummary?
+	#db=core;g=ENSG00000139618;r=13:32315474-32400266;t=ENST00000380152
 
+	#liens des prots : ""...
 
-#def PROT_name():
-	
-
-#ncbi  ??? https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=brca2
-
-#id
-#https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gene&term=(brca2[Gene%20Name])%20AND%20homo_sapiens[Organism]
-
-#ortho? 
-#https://www.ncbi.nlm.nih.gov/gene/?Term=ortholog_gene_675[group]
+	#a ecrire dans le fichier html 
