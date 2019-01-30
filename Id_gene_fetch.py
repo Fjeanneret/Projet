@@ -2,7 +2,7 @@ import requests, sys
 
 GeneSymbols = []
 Species=[]
-ID_ENSG=[]
+Gene_ID=[]
 '''
 fichier = open("GeneSymbols.txt")
 lignes = fichier.readlines()
@@ -23,12 +23,12 @@ for line in lines:
 
 i = 0
 
-while i < len(GeneSymbols):
+while i < 1:
 
 
 	server = "https://rest.ensembl.org"
 	#ext = "/xrefs/symbol/homo_sapiens/BRCA2?"
-	ext = "/xrefs/symbol/{}/{}".format(Species[i],GeneSymbols[i])
+	ext = "/xrefs/symbol/{}/{}".format(Species[0],GeneSymbols[0])
 	r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
 	 
 	if not r.ok:
@@ -41,12 +41,21 @@ while i < len(GeneSymbols):
 	
 	decoded = r.json()
 	
-	ID_ENSG.append(decoded[0]["id"])
+	
+	j=0
+	while j<len(decoded):
+		
+		Gene_ID.append(decoded[j]["id"])
+		j+=1
 	i+=1
 	
 	
+	
 print(ID_ENSG)
-''' lien genome browser avec l'id
+''' 
+/Homo_sapiens/gene/Summary?g=
+
+lien genome browser avec l'id
 www.ensembl.org/Homo_sapiens/Location/View?db=core;g=ENSG00000139618;
 
 
@@ -57,14 +66,33 @@ db=core;g=ENSG00000139618;r=13:32315474-32400266;t=ENST00000380152
 
 orthologues :
 
+voir si orthologue avec /homology puis afficher si ok : 
+
 http://www.ensembl.org/Homo_sapiens/Gene/Compara_Ortholog?db=core;
 g=ENSG00000012048;r=17:43044295-43170245
 
 gerer si pas dans "core"
+
+if if if avec requests.get() if not r.ok:
 
 http://plants.ensembl.org/Arabidopsis_thaliana/Gene/Compara_Ortholog?
 db=core;g=AT2G18790;r=2:8139756-8144461
 
 prendre type en amont ?
 
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- information on Pfam-A family PF02171 (Piwi), generated: 16:37:09 26-Oct-2009 -->
+<pfam xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="https://pfam.xfam.org/"
+      xsi:schemaLocation="https://pfam.xfam.org/
+                          https://pfam.xfam.org/static/documents/schemas/pfam_family.xsd"
+      release="24.0"
+      release_date="2009-10-07">
+  <entry entry_type="Pfam-A" accession="PF02171" id="Piwi" />
+</pfam>%
+
 '''
+
