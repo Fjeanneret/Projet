@@ -1,56 +1,66 @@
-#prot ensembl 
+import requests
 
-#là faut prot id selon specie et genesymbol d'Uniprot : 
+#choix de prendre la premiere prot /!\, voir avec liste des prots ensembl ?
+def proteinName_ID(Species,GeneSymbols):
 
-#avoir id uniprot avec espèce et genesymbol : 
+	r = requests.get("https://www.uniprot.org/uniprot/?query=organism:{}+gene_exact:{}&reviewed:yes&columns=id,protein%20names&format=tab".format(Species,GeneSymbols))
 
+	IDsAndProteinNames = r.text
+	lines = IDsAndProteinNames.splitlines()
+	firstLine = lines[1]
+	IDAndNamesThenOnlyNames = firstLine.split("\t")
+	#print(IDAndNamesThenOnlyNames)
+	firstUniprotID = IDAndNamesThenOnlyNames.pop(0)
+	proteinNames = IDAndNamesThenOnlyNames[0].split(" (")
+	#print(IDAndNamesThenOnlyNames)
+	mainName = proteinNames.pop(0)
+	secondariesNames = []
+	print("UniprotID : ", firstUniprotID)
+	print("Nom principal : ", mainName,"\n")
 
-import requests, sys
+	i=0
+	print("Nom secondaires : ")
+	for i in range(0,len(proteinNames)):
+		secondariesNames.append(proteinNames[i].replace(")",""))
+		print(secondariesNames[i])
+		i+=1
+	return firstUniprotID
+
+def fromUniprotToPDB_ID(firstUniprotID):
 
 #r = requests.get("https://www.uniprot.org/uniprot/?query=organism:homo_sapiens+gene_exact:BRCA2&reviewed:yes&columns=id&format=tab")
+	protList=[]
+	url = "https://www.rcsb.org/pdb/rest/search"
+	data= """ 
+	<orgPdbQuery>
 
-url = "https://www.rcsb.org/pdb/rest/search"
-data= """ 
-<orgPdbQuery>
+	<queryType>org.pdb.query.simple.UpAccessionIdQuery</queryType>
 
-<queryType>org.pdb.query.simple.UpAccessionIdQuery</queryType>
+	<accessionIdList>{}</accessionIdList>
 
-<accessionIdList>P51587</accessionIdList>
+	</orgPdbQuery>""".format(firstUniprotID)
 
-</orgPdbQuery>"""
+	r = requests.post(url, data=data ,headers={"Content-Type":"application/x-www-form-urlencoded"})
 
-r = requests.post(url, data=data ,headers={"Content-Type":"application/x-www-form-urlencoded"})
+	wholeFileIDs = r.text
+	lines = wholeFileIDs.splitlines()
+
+	#gerer le "...:2" avec regex puis construction du lien
+	i=0
+	for i in range(0,len(lines)):
+		protList.append(lines[i].split(":")[0])
+		i+=1
+	print(protList)
+
+	#pour chaque nom, si noms =/=, afficher liens Strings et de Structure
 
 
-
-
-wholeFileIDs = r.text
-print(r.text)
-lines = wholeFileIDs.splitlines()
-#print(lines[2])
-#FirstUniprotID = lines[1]
-#print(FirstUniprotID)
-
-#UniprotRefID = lineOne[O]
-
-#print(UniprotRefID)
 
 
 '''
+brouillon
+
 https://www.uniprot.org/uniprot/?query=organism:homo_sapiens+gene_exact:BRCA2&reviewed:yes&columns=id,protein%20names&format=tab
-
-r = requests.get("https://www.uniprot.org/uniprot/?query=organism:homo_sapiens+gene_exact:BRCA2&reviewed:yes&format=txt&colums=id")
-#r.raise_for_status()
-#sys.exit()
-print(r)
-decoded = r.json()
-print(repr(decoded))
-'''
-
-
-
-#pour avoir pdb acc avec uniprot acc : 
-
 
 url = "https://www.rcsb.org/pdb/rest/search"
 data= """ 
@@ -69,7 +79,7 @@ header={"Content-Type":"Application/x-www-form-urlencoded"}
 r = requests.post(url,data=data,headers=header)
 
 print(r.text)
-'''
+
 #pfam :
 
 url = "https://pfam.xfam.org/family?id=brca2&output=xml"

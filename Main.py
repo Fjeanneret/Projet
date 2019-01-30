@@ -2,6 +2,7 @@
 
 import requests, re
 from Ensembl import * 
+from uniprot_pdb import * 
 
 GeneSymbols = []
 Species=[]
@@ -19,7 +20,7 @@ for line in lines:
 	GeneSymbolAndSpecie =  line.split("\t")
 	GeneSymbols.append(GeneSymbolAndSpecie[0])
 	Species.append(GeneSymbolAndSpecie[1])
-print(GeneSymbols,Species)
+#print(GeneSymbols,Species)
 
 #for GeneSymbol in GeneSymbols:
 	#print(geneID("GeneSymbol","Homo_sapiens"))
@@ -28,8 +29,9 @@ print(GeneSymbols,Species)
 j=0
  
 while j<len(GeneSymbols):
-	geneIDs =  geneID_fetch(GeneSymbols[j],Species[j])
-	
+	geneIDs =  geneID_fetch(Species[j],GeneSymbols[j])
+	prot = proteinName_ID(Species[j],GeneSymbols[j])
+	fromUniprotToPDB_ID(prot)
 	#transcript and protein ID fetching
 	for ID in geneIDs:
 		TranscriptID_ProtID_fetch(ID)

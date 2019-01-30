@@ -6,7 +6,7 @@
 
 import requests
 
-def geneID_fetch(GeneSymbols,Species):
+def geneID_fetch(Species,GeneSymbols):
 	ensembl_server = None 
 	ID_ENSG=[]
 	server = "https://rest.ensembl.org"
