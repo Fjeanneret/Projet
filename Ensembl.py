@@ -3,8 +3,11 @@
 #for nombre de trucs
 	
 #main^
+
+import requests, sys
+
 def geneID(GeneSymbols,Species):
-	import requests, sys
+	
 	server = "https://rest.ensembl.org"
 	#ext = "/xrefs/symbol/homo_sapiens/BRCA2?"
 	ext = "/xrefs/symbol/{}/{}".format(Species,GeneSymbols)
@@ -20,7 +23,7 @@ def geneID(GeneSymbols,Species):
 	
 	decoded = r.json()
 	#gerer les plusieurs noms??
-	autre=[]
+	ID_ENSG=[]
 	j=0
 	#si len(decoded)>1 ? faire .join ?  
 	while j<len(decoded):
@@ -29,8 +32,11 @@ def geneID(GeneSymbols,Species):
 		#ecrire dans fichier plutot ?
 		
 		j+=1
-	i+=1
+	
 	print(ID_ENSG)
+
+
+geneID("BRCA2","homo_sapiens")
 	#pour chaque element de Gene_id construire url
 #main : ???
 '''
