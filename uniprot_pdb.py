@@ -48,46 +48,23 @@ def fromUniprotToPDB_ID(firstUniprotID):
 	#gerer le "...:2" avec regex puis construction du lien
 	i=0
 	for i in range(0,len(lines)):
-		protList.append(lines[i].split(":")[0])
+		a=lines[i].split(":")[0]
+		#protList.append(a)
+		
+		#print(protList)
+
+		r = requests.get("https://www.rcsb.org/pdb/rest/customReport.xml?pdbids={}&customReportColumns=structureTitle&service=wsfile&format=csv".format(a))
+		
+		
 		i+=1
-	print(protList)
+		wholeFile = r.text
+		#print(wholeFile)
+		linesFile = wholeFile.splitlines()
+		if len(linesFile)>1: 
+			PDBid_Name_Structure = linesFile[1]
+			#print("\n",PDBid_Name_Structure)
+			Name_Structure = PDBid_Name_Structure.split(",")[1]
+			Structure = Name_Structure.split(" (").pop(0)
+			print("Structure : ", Structure)
 
 	#pour chaque nom, si noms =/=, afficher liens Strings et de Structure
-
-
-
-
-'''
-brouillon
-
-https://www.uniprot.org/uniprot/?query=organism:homo_sapiens+gene_exact:BRCA2&reviewed:yes&columns=id,protein%20names&format=tab
-
-url = "https://www.rcsb.org/pdb/rest/search"
-data= """ 
-<orgPdbQuery>
-
-<queryType>org.pdb.query.simple.UpAccessionIdQuery</queryType>
-
-<description>Simple query for a list of Uniprot Accession IDs: P69905</description>
-
-<accessionIdList>P69905</accessionIdList>
-
-</orgPdbQuery>"""
-
-header={"Content-Type":"Application/x-www-form-urlencoded"}
-
-r = requests.post(url,data=data,headers=header)
-
-print(r.text)
-
-#pfam :
-
-url = "https://pfam.xfam.org/family?id=brca2&output=xml"
-#https://pfam.xfam.org/family/Piwi/acc
-
-r = requests.get(url)
-
-print(r.text)
-
-#pfam structure url : https://pfam.xfam.org/structure/1NOW#tabview=tab1
-'''

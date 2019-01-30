@@ -35,4 +35,5 @@ while j<len(GeneSymbols):
 	#transcript and protein ID fetching
 	for ID in geneIDs:
 		TranscriptID_ProtID_fetch(ID)
+	print("---------------------------------------------------------------------------")
 	j+=1
