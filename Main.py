@@ -1,16 +1,9 @@
-#Main.py
-
 import requests, re
 from Ensembl import * 
 from uniprot_pdb import * 
 
 GeneSymbols = []
 Species=[]
-
-'''
-fichier = open("GeneSymbols.txt")
-lignes = fichier.readlines()
-print(lignes)'''
 
 with open("GeneSymbols.txt") as f:
     lines = f.read().splitlines() 
@@ -20,14 +13,10 @@ for line in lines:
 	GeneSymbolAndSpecie =  line.split("\t")
 	GeneSymbols.append(GeneSymbolAndSpecie[0])
 	Species.append(GeneSymbolAndSpecie[1])
-#print(GeneSymbols,Species)
 
-#for GeneSymbol in GeneSymbols:
-	#print(geneID("GeneSymbol","Homo_sapiens"))
+#print(GeneSymbols,Species)
 	
-	
-j=0
- 
+j=0 
 while j<len(GeneSymbols):
 	geneIDs =  geneID_fetch(Species[j],GeneSymbols[j])
 	prot = proteinName_ID(Species[j],GeneSymbols[j])
@@ -37,3 +26,4 @@ while j<len(GeneSymbols):
 		TranscriptID_ProtID_fetch(ID)
 	print("---------------------------------------------------------------------------")
 	j+=1
+

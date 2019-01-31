@@ -33,11 +33,8 @@ def fromUniprotToPDB_ID(firstUniprotID):
 	url = "https://www.rcsb.org/pdb/rest/search"
 	data= """ 
 	<orgPdbQuery>
-
 	<queryType>org.pdb.query.simple.UpAccessionIdQuery</queryType>
-
 	<accessionIdList>{}</accessionIdList>
-
 	</orgPdbQuery>""".format(firstUniprotID)
 
 	r = requests.post(url, data=data ,headers={"Content-Type":"application/x-www-form-urlencoded"})

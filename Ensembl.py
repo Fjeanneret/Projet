@@ -39,36 +39,14 @@ def geneID_fetch(Species,GeneSymbols):
 			geneSummary_url = "https://www.ensembl.org/{}/Gene/Summary?db=core;g={};".format(Species,ID_ENSG[j])
 			ortholog_url = "https://www.ensembl.org/{}/Location/View?db=core;g={};".format(Species,ID_ENSG[j])
 		else: 
-			serverIndex=0
 			serversList = ["plants","fungi","Bacteria","Protists","Metazoa"]
-			ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(serversList[serverIndex],Species, ID_ENSG[j])
-			r = requests.get(ortholog_url, headers={ "Content-Type" : "application/json"})
-			print("plant")
-
-			if not r.ok:
-				serverIndex +=1
-				ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(serversList[serverIndex],Species, ID_ENSG[j])
+			for server in serversList:
+				ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(server,Species, ID_ENSG[j])
 				r = requests.get(ortholog_url, headers={ "Content-Type" : "application/json"})
+				print(server)
+				if r.ok: break
 				
-				print("fungi")
-				if not r.ok:
-					serverIndex +=1					
-					ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(serversList[serverIndex],Species, ID_ENSG[j])
-					r = requests.get(ortholog_url, headers={ "Content-Type" : "application/json"})
-					
-					print("Protists")
-					if not r.ok:
-						erverIndex +=1	
-						ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(serversList[serverIndex],Species, ID_ENSG[j])
-						r = requests.get(ortholog_url, headers={ "Content-Type" : "application/json"})
-						
-						print("Bacteria")
-						if not r.ok:
-							erverIndex +=1	
-							ortholog_url = "https://{}.ensembl.org/{}/Gene/Compara_Ortholog?db=core;g={};".format(serversList[serverIndex],Species, ID_ENSG[j])
-							r = requests.get(ortholog_url, headers={ "Content-Type" : "application/json"})
-							print("Metazoa")
-			geneSummary_url = "http://{}.ensembl.org/{}/Gene/Summary?g={};".format(serversList[serverIndex], Species, ID_ENSG[j])
+			geneSummary_url = "https://{}.ensembl.org/{}/Gene/Summary?g={};".format(server, Species, ID_ENSG[j])
 		print(ortholog_url,"\n",geneSummary_url)
 		j+=1
 
