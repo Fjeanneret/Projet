@@ -28,8 +28,8 @@ def proteinName_ID(Species,GeneSymbols):
 
 def fromUniprotToPDB_ID(firstUniprotID):
 
-#r = requests.get("https://www.uniprot.org/uniprot/?query=organism:homo_sapiens+gene_exact:BRCA2&reviewed:yes&columns=id&format=tab")
-	protList=[]
+	#r = requests.get("https://www.uniprot.org/uniprot/?query=organism:homo_sapiens+gene_exact:BRCA2&reviewed:yes&columns=id&format=tab")
+
 	url = "https://www.rcsb.org/pdb/rest/search"
 	data= """ 
 	<orgPdbQuery>
