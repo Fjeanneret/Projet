@@ -1,6 +1,16 @@
 import requests
 
+## Function to help information fetching and writing
+
 def dataFetchingRequest(ext):
+	"""
+	Let to make a request in ensembl rest API
+	What we want to fetch is provide by ext element
+
+	First request with ensembl.org then ensemblegenomes.org
+	in case of empty answer.
+	"""
+
 	server = "https://rest.ensembl.org"
 	r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
 
@@ -11,120 +21,148 @@ def dataFetchingRequest(ext):
 	Data = r.json()
 	return Data
 
+
 def orthologsTest(geneID):
-	#a faire avec /homologies
+	"""
+	Let to know if an orthologs list exists.
+
+	Return True 
+	"""
+
 	orthologsExist = None
+
+	# Make homology list request
 	ext = "/homology/id/{}?format=condensed;type=orthologues".format(geneID)
 	data = dataFetchingRequest(ext)
+
+	# Test of relevant indexes of data fetched in json format
 	if len(data["data"]) != 0:
 		indexTest = data["data"][0]["homologies"]
 	else : indexTest = data["data"]
+
 	if len(indexTest) > 1:
 		orthologsExist = True
+
 	return orthologsExist
+
 
 def EnsEMBL_url_building(Species, geneID):
 	dbList = ["www","plants","fungi","Bacteria","Protists","Metazoa"]
 
 	for dataBase in dbList:
 		geneSummary_url = "https://{}.ensembl.org/{}/Gene/Summary?db=core;g={};".format(dataBase,Species, geneID)
-		r = requests.get(geneSummary_url, headers={ "Content-Type" : "application/json"})
+		r = requests.get(geneSummary_url, headers = {"Content-Type" : "application/json"})
 		if r.ok: break
+
 	urlBase = "https://{}.ensembl.org/{}/".format(dataBase, Species)
-	geneSummary_url = urlBase + "/Gene/Summary?g={};".format(geneID)
+	#geneSummary_url = urlBase + "/Gene/Summary?g={};".format(geneID)
 	location_url = urlBase + "/Location/View?db=core;g={};".format(geneID) 
 
+	# Orthologs list url according to orthologs list exists or not. 
 	if orthologsTest(geneID) == True : 
 		ortholog_url = urlBase + "/Gene/Compara_Ortholog?db=core;g={};".format(geneID)
-		balise22 = "<a href={}>Liste des orthologues</a><br><br>".format(ortholog_url)
+		tagOrtholog_url = "<a class='btn btn-warning' href={}>Liste des orthologues</a><br>".format(ortholog_url)
 	else : 
 		ortholog_url = ""
-		balise22 = "Pas d'orthologues\n"
+		tagOrtholog_url = "Pas d'orthologues\n"
 
-	balise = "<a href={}>{}</a><br>".format(geneSummary_url,geneID)
-	balise2 = "<a href={}>{}</a><br>".format(location_url, "genomeViewer")
+	# Create HTML tags
+	tagGeneSummary_url = "<a class='card-header' href={}>{}</a><br>".format(geneSummary_url,geneID)
+	tagLocation_url = "<a class='btn btn-info' href={}>{}</a><br>".format(location_url, "genomeViewer")
 
+	# Open and write in file with bootstrap function.
 	result = open("result.html", "a")
-	result.write(balise)
-	result.write(balise2)
-	result.write(balise22)
+	bootstrap(tagGeneSummary_url,tagLocation_url,tagOrtholog_url)
 	result.close()
 
+## Esthetic functions
+
+def bootstrap(summary,viewer,ortho):
+	"""
+	Add bootstrap element to enhance form and write 
+	in table file
+	"""
+
+	result = open("result.html", "a")
+	case = """<div class="card text-center">
+		{}
+		<br>
+			<div class="card-body">{}
+			<br><br>
+				{}
+			</div>
+
+	</div><br>""".format(summary,viewer,ortho)
+
+	result.write(case)
+
+
+## Essential functions to fetch ensEMBL information
 
 def geneID_fetch(Species,GeneSymbols):
-	#requete pour obtenir le fichier des genes id via le gene symbol et l'espece
+	"""
+	Get gene EnsEMBL ID with genesymbol and specie
+	"""
+
 	genesList=[]
 	ext = "/xrefs/symbol/{}/{}".format(Species,GeneSymbols)
 	geneData = dataFetchingRequest(ext)
+
+	# Create td tag with data fetched
 	i=0
 	result = open("result.html", "a")
 	result.write("<td>")
 	result.close()
 	while i<len(geneData):
 		geneID = geneData[i]["id"]
-		genesList.append(geneID)	
-		#fct qui genere les liens relatifs 
+		genesList.append(geneID)	 
 		EnsEMBL_url_building(Species,geneID)
 		#result.write("<br>")
 		i+=1
 	result = open("result.html", "a")
 	result.write("</td>")
 	result.close()
+
 	return genesList
 
 
 def TranscriptID_ProtID_fetch(Species, geneIDs):
+	"""
+	Get transcript and protein EnsEMBL ID with geneID and specie
+	"""
+
 	proteinList=[]
 	result = open("result.html", "a")
-	result.write("<td>")
+	result.write("<td><ul class='list-group'>")
+
 	for ID in geneIDs:
 		ext = "/lookup/id/{}?expand=1".format(ID)
 		dataGet = dataFetchingRequest(ext)
 
 		i=0
-		while i<len(dataGet["Transcript"]): #chacun des transcrits du fichier . . . avec 2 fct ? pour rna et prot ? puis affichage
+		while i<len(dataGet["Transcript"]): 
 			transcript_ID = dataGet["Transcript"][i]["id"]
-			#print(transcript_ID)
-			#gerer database differente
-			result.write("<a href=http://www.ensembl.org/{}/Transcript/Summary?db=core;t={}>{}</a><br>".format(Species,transcript_ID,transcript_ID))
+			result.write("<a  class='list-group-item' href=http://www.ensembl.org/{}/Transcript/Summary?db=core;t={}>{}</a><br>".format(Species,transcript_ID,transcript_ID))
 
-			if dataGet["Transcript"][i]["biotype"]=="protein_coding":
+			# Looking for protein ID only if transcript is protein coding in json file get
+			if dataGet["Transcript"][i]["biotype"] == "protein_coding":
 				transcript_ID = dataGet["Transcript"][i]["id"]
-				#print(decoded["Transcript"][i]["biotype"])
-				#print(decoded["Transcript"])
-				#print("ARN : ",decoded["Transcript"][i]["id"])
-				proteinID = dataGet["Transcript"][i]["Translation"]["id"] #mus musculus ENSM ...1547 :/
+				proteinID = dataGet["Transcript"][i]["Translation"]["id"] 
 				proteinList.append(proteinID)
+			
 			i+=1
-		result.write("<br>")
+		result.write("<hr>")
 		print(proteinList)
-	result.write("</td>\n")
+
+	result.write("</ul></td>\n")
 	print(proteinList)
-	result.write("<td>")
+	result.write("<td><ul class='list-group'>")
+
+	protein_url_list = []
 	for proteinID in proteinList:
-		result.write("<a href=http://www.ensembl.org/{}/Transcript/Sequence_Protein?db=core;t={}>{}</a><br>".format(Species,proteinID, proteinID))
+		result.write("<a class='list-group-item' href=http://www.ensembl.org/{}/Transcript/Sequence_Protein?db=core;t={}>{}</a><br>".format(Species,proteinID, proteinID))
 		result.write("<br>")
-	result.write("</td>\n")
+
+	result.write("<hr>")
+	result.write("</ul></td>\n")
 	result.close()
-
-'''
-#def protURL(proteinList)
-	result.write("<td>")
-	for proteinID in proteinList:
-		result.write("<a href=http://www.ensembl.org/{}/Transcript/Sequence_Protein?db=core;t={}>{}</a><br>".format(Species,transcript_ID, proteinID))
-		result.write("<br>")
-	result.write("</td>\n")
-	result.close()'''
-
-	#liens des transcripts : http://www.ensembl.org/Homo_sapiens/Transcript/Summary?
-	#db=core;g=ENSG00000139618;
-
-	#liens des prots : ""...
-
-	#a ecrire dans le fichier html 
-
-
-
-# gerer creation lien orthologues selon si existent
-
-# virer gene symbol et species si deja existentes

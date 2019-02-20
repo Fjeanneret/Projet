@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+            <title>Annotations extraites</title>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+           
+            <script
+                src="https://code.jquery.com/jquery-3.3.1.min.js"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                crossorigin="anonymous"></script>
+            
+            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+            <!-- bootstrap -->
+           
+ <!-- font-awesome -->
+
+    </head>
+
+    <body >
+
+        <script>
+            $(document).ready(function() {
+                $('#example').DataTable();
+            } );
+        </script> 
+
+        <table id="example" class="display text-center text-decoration-none" style="width:100%">
+                <thead>
+                    <tr class="alert alert-primary">
+                        <th class="text-muted">Species</th>
+                        <th class="text-muted">Gene Symbol</th>
+                        <th class="text-muted">Gêne(s) EnsEMBL</th>
+                        <th class="text-muted">Transcrits</th>
+                        <th class="text-muted">N° accès protéine EnsEMBL</th>
+                        <th class="text-muted">Uniprot ID et nom</th>
+                        <th class="text-muted">Structures des protéines</th>
+                        
+                        
+                    </tr>
+                </thead>
+                <tbody>

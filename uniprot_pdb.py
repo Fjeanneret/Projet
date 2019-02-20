@@ -17,6 +17,13 @@ def proteinName_ID(Species,GeneSymbols):
 	secondariesNames = []
 	print("UniprotID : ", firstUniprotID)
 	print("Nom principal : ", mainName,"\n")
+	result = open("result.html", "a")
+	result.write("<td>")
+	line = firstUniprotID + ' : ' + mainName
+	result.write(line)
+	result.write("</td>")
+	result.close()
+
 
 	i=0
 	print("Nom secondaires : ")
@@ -26,8 +33,15 @@ def proteinName_ID(Species,GeneSymbols):
 		i+=1
 	return firstUniprotID
 
-def fromUniprotToPDB_ID(firstUniprotID):
+def interactionNetwork(firstUniprotID):
+	r = requests.get("https://string-db.org/api/image/network?identifiers={}".format(firstUniprotID))
 
+	if not r.ok: print("Pas de liens String")
+	else : print("Lien à faire") 
+
+#"https://string-db.org/api/json/network?identifiers={}".format(firstUniprotID)
+
+def fromUniprotToPDB_ID(firstUniprotID):
 	#r = requests.get("https://www.uniprot.org/uniprot/?query=organism:homo_sapiens+gene_exact:BRCA2&reviewed:yes&columns=id&format=tab")
 
 	url = "https://www.rcsb.org/pdb/rest/search"
@@ -43,6 +57,12 @@ def fromUniprotToPDB_ID(firstUniprotID):
 	lines = wholeFileIDs.splitlines()
 
 	#gerer le "...:2" avec regex puis construction du lien
+
+
+
+	result = open("result.html", "a")
+	result.write("<td>")
+
 	i=0
 	for i in range(0,len(lines)):
 		a=lines[i].split(":")[0]
@@ -57,11 +77,17 @@ def fromUniprotToPDB_ID(firstUniprotID):
 		wholeFile = r.text
 		#print(wholeFile)
 		linesFile = wholeFile.splitlines()
+
 		if len(linesFile)>1: 
 			PDBid_Name_Structure = linesFile[1]
 			#print("\n",PDBid_Name_Structure)
 			Name_Structure = PDBid_Name_Structure.split(",")[1]
 			Structure = Name_Structure.split(" (").pop(0)
-			print("Structure : ", Structure)
+			Structure = "Structure : " + Structure + "<br>"
+
+			result.write(Structure)
+	result.write("</td>")
+	result.close()
+
 
 	#pour chaque nom, si noms =/=, afficher liens Strings et de Structure
