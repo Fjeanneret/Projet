@@ -42,11 +42,12 @@ def orthologsTest(geneID):
 
 	if len(indexTest) > 1:
 		orthologsExist = True
+	else : orthologsExist = False
 
 	return orthologsExist
 
 
-def EnsEMBL_url_building(Species, geneID):
+def EnsEMBL_url_building(Species, geneID,file):
 	dbList = ["www","plants","fungi","Bacteria","Protists","Metazoa"]
 
 	for dataBase in dbList:
@@ -55,13 +56,12 @@ def EnsEMBL_url_building(Species, geneID):
 		if r.ok: break
 
 	urlBase = "https://{}.ensembl.org/{}/".format(dataBase, Species)
-	#geneSummary_url = urlBase + "/Gene/Summary?g={};".format(geneID)
 	location_url = urlBase + "/Location/View?db=core;g={};".format(geneID) 
 
 	# Orthologs list url according to orthologs list exists or not. 
 	if orthologsTest(geneID) == True : 
 		ortholog_url = urlBase + "/Gene/Compara_Ortholog?db=core;g={};".format(geneID)
-		tagOrtholog_url = "<a class='btn btn-warning' href={}>Liste des orthologues</a><br>".format(ortholog_url)
+		tagOrtholog_url = "<a class='btn btn-warning' href={}>Liste des orthologues</a><br>\n".format(ortholog_url)
 	else : 
 		ortholog_url = ""
 		tagOrtholog_url = "Pas d'orthologues\n"
@@ -71,19 +71,17 @@ def EnsEMBL_url_building(Species, geneID):
 	tagLocation_url = "<a class='btn btn-info' href={}>{}</a><br>".format(location_url, "genomeViewer")
 
 	# Open and write in file with bootstrap function.
-	result = open("result.html", "a")
-	bootstrap(tagGeneSummary_url,tagLocation_url,tagOrtholog_url)
-	result.close()
+	bootstrap(tagGeneSummary_url,tagLocation_url,tagOrtholog_url,file)
+	
 
 ## Esthetic functions
 
-def bootstrap(summary,viewer,ortho):
+def bootstrap(summary,viewer,ortho,file):
 	"""
 	Add bootstrap element to enhance form and write 
 	in table file
 	"""
 
-	result = open("result.html", "a")
 	case = """<div class="card text-center">
 		{}
 		<br>
@@ -94,12 +92,12 @@ def bootstrap(summary,viewer,ortho):
 
 	</div><br>""".format(summary,viewer,ortho)
 
-	result.write(case)
+	file.write(case)
 
 
 ## Essential functions to fetch ensEMBL information
 
-def geneID_fetch(Species,GeneSymbols):
+def geneID_fetch(Species,GeneSymbols,file):
 	"""
 	Get gene EnsEMBL ID with genesymbol and specie
 	"""
@@ -110,30 +108,30 @@ def geneID_fetch(Species,GeneSymbols):
 
 	# Create td tag with data fetched
 	i=0
-	result = open("result.html", "a")
-	result.write("<td>")
-	result.close()
+	
+	file.write("<td>")
+	
 	while i<len(geneData):
 		geneID = geneData[i]["id"]
 		genesList.append(geneID)	 
-		EnsEMBL_url_building(Species,geneID)
+		EnsEMBL_url_building(Species,geneID,file)
 		#result.write("<br>")
 		i+=1
-	result = open("result.html", "a")
-	result.write("</td>")
-	result.close()
+	
+	file.write("</td>")
+	
 
 	return genesList
 
 
-def TranscriptID_ProtID_fetch(Species, geneIDs):
+def TranscriptID_ProtID_fetch(Species, geneIDs,file):
 	"""
 	Get transcript and protein EnsEMBL ID with geneID and specie
 	"""
 
 	proteinList=[]
-	result = open("result.html", "a")
-	result.write("<td><ul class='list-group'>")
+	
+	file.write("<td><ul class='list-group'>")
 
 	for ID in geneIDs:
 		ext = "/lookup/id/{}?expand=1".format(ID)
@@ -142,7 +140,8 @@ def TranscriptID_ProtID_fetch(Species, geneIDs):
 		i=0
 		while i<len(dataGet["Transcript"]): 
 			transcript_ID = dataGet["Transcript"][i]["id"]
-			result.write("<a  class='list-group-item' href=http://www.ensembl.org/{}/Transcript/Summary?db=core;t={}>{}</a><br>".format(Species,transcript_ID,transcript_ID))
+			file.write("""<a  class='list-group-item' 
+			href=http://www.ensembl.org/{}/Transcript/Summary?db=core;t={}>{}</a><br>""".format(Species,transcript_ID,transcript_ID))
 
 			# Looking for protein ID only if transcript is protein coding in json file get
 			if dataGet["Transcript"][i]["biotype"] == "protein_coding":
@@ -151,18 +150,18 @@ def TranscriptID_ProtID_fetch(Species, geneIDs):
 				proteinList.append(proteinID)
 			
 			i+=1
-		result.write("<hr>")
+		file.write("<hr>")
 		print(proteinList)
 
-	result.write("</ul></td>\n")
+	file.write("</ul></td>\n")
 	print(proteinList)
-	result.write("<td><ul class='list-group'>")
+	file.write("<td><ul class='list-group'>")
 
 	protein_url_list = []
 	for proteinID in proteinList:
-		result.write("<a class='list-group-item' href=http://www.ensembl.org/{}/Transcript/Sequence_Protein?db=core;t={}>{}</a><br>".format(Species,proteinID, proteinID))
-		result.write("<br>")
+		file.write("<a class='list-group-item' href=http://www.ensembl.org/{}/Transcript/Sequence_Protein?db=core;t={}>{}</a><br>".format(Species,proteinID, proteinID))
+		file.write("<br>")
 
-	result.write("<hr>")
-	result.write("</ul></td>\n")
-	result.close()
+	file.write("<hr>")
+	file.write("</ul></td>\n")
+	
