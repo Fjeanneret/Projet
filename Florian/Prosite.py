@@ -16,7 +16,6 @@ def Prosite(UniprotID,file):
 		tag_Prosite_url = "<a href='{}' class='btn btn-danger rounded-pill'>{}</a>".format(Prosite_url,signature_id)
 		file.write("<br><span class='btn btn-light border border-light text-light rounded-0'>|</span><br>")
 		file.write(tag_Prosite_url)
-		file.write("<br><span class='btn btn-light border border-light text-light rounded-0'>|</span><br>")
 		i+=1
 	file.write("<a href='{}'>view</a>".format(prosite_url))
 	file.write("</td>")

@@ -5,7 +5,8 @@ from Florian.ncbi import *
 from Florian.PDB import *
 from Florian.Pfam import * 
 from Florian.Prosite import * 
-from Florian.qGO import * 
+from Florian.KEGG import * 
+from Florian.String import * 
 from tkinter import *
 from tkinter.filedialog import *
 
@@ -35,7 +36,6 @@ def mainF(windows, data, result, txt):
 
 		# Start with EnsEMBL
 		genesList =  geneID_fetch(Specie,GeneSymbol,result)	
-		print(genesList)
 		TranscriptID_ProtID_fetch(Specie, genesList,result)
 
 		# Start with NCBI"""

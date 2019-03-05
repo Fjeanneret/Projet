@@ -72,7 +72,6 @@ fenetre.resizable(width=False, height=False)
 fenetre.title("Extraction d'annotations") 
 
 # Pictures
-imgicon = PhotoImage(file=os.path.join("",'logo.png'))
 dinner = PhotoImage(file=os.path.join("",'t.png'))
 trash = PhotoImage(file=os.path.join("",'trash.png'))
 upload = PhotoImage(file=os.path.join("",'upload.png'))
@@ -80,7 +79,6 @@ resultIcon = PhotoImage(file=os.path.join("",'print.png'))
 saveIcon = PhotoImage(file=os.path.join("",'save.png'))
 
 # Boxes
-fenetre.tk.call('wm','iconphoto',fenetre._w,imgicon)
 bottomframe = Frame(fenetre)
 bottomframe.pack(fill=X, side = BOTTOM )
 fr = Frame(fenetre)
