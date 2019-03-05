@@ -6,14 +6,12 @@ from Florian.PDB import *
 from Florian.Pfam import * 
 from Florian.Prosite import * 
 from Florian.KEGG import * 
+from Florian.qGO import * 
 from Florian.String import * 
 from tkinter import *
 from tkinter.filedialog import *
 
 	
-def interface():
-	c=4
-
 def mainF(windows, data, result, txt):
 
 	truc = 1
@@ -67,13 +65,3 @@ def mainF(windows, data, result, txt):
 	t2="{}.60".format(truc+1)
 	txt.tag_add("start", "1.0", t2)
 	txt.tag_config("start", foreground="#47ADA0")
-
-
-	#Opening of result.html
-
-
-	#bottomframe.update()
-
-
-
-	#main("GeneSymbols.txt")
