@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript" src='https://code.jquery.com/jquery-3.3.1.js'></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.4/js/buttons.colVis.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css">
+
+    <script>
+
+$(document).ready(function(){
+$('#myTable').DataTable({
+dom: 'Bfrtip',
+buttons: [
+'colvis',
+]
+});
+});
+    </script>
+
+</head>
+<body>
+<center><div><h1 style="display: inline; font-size: 3em; color:rgb(225,87,51);">M1 BIMS Projet by Morgane BRUNO </h1></div>
+<table id="myTable" class="display nowrap">
+    <thead>
+    <tr>
+				<th>Gene Symbol</th>
+            	<th>Specie</th>
+                <th>ID and Official Full Name (NCBI)</th>
+                <th>Transcripts ID (Refseq)</th>
+                <th>Proteins ID (Refseq)</th>
+                <th>KEGG ID</th>
+				<th>KEGG Pathway</th>
+                <th>Gene ID (Ensembl)<br>Genome Browser + Ortholog</th>
+                <th>Transcripts (Ensembl)</th>
+                <th>Proteins (Ensembl)</th>
+                <th>Protein ID and Name (UNIPROT)</th>
+                <th>Biological process(GO)</th>
+                <th>Molecular function(GO)</th>
+                <th>Cellular component(GO)</th>
+                <th>PDB ID</th>
+                <th>Interactions (STRING)</th>
+                <th>PROSITE ID</th>
+				<th>Pfam ID</th>
+     </tr>
+     </thead>
+<tbody>

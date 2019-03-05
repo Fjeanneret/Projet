@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript" src='https://code.jquery.com/jquery-3.3.1.js'></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.4/js/buttons.colVis.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css">
+
+    <script>
+
+$(document).ready(function(){
+$('#myTable').DataTable({
+dom: 'Bfrtip',
+buttons: [
+'colvis',
+]
+});
+});
+    </script>
+
+</head>
+<body>
+<center><div><h1 style="display: inline; font-size: 3em; color:rgb(225,87,51);">M1 BIMS Projet by Morgane BRUNO </h1></div>
+<table id="myTable" class="display nowrap">
+    <thead>
+    <tr>
+				<th>Gene Symbol</th>
+            	<th>Specie</th>
+                <th>ID and Official Full Name (NCBI)</th>
+                <th>Transcripts ID (Refseq)</th>
+                <th>Proteins ID (Refseq)</th>
+                <th>KEGG ID</th>
+				<th>KEGG Pathway</th>
+                <th>Gene ID (Ensembl)<br>Genome Browser + Ortholog</th>
+                <th>Transcripts (Ensembl)</th>
+                <th>Proteins (Ensembl)</th>
+                <th>Protein ID and Name (UNIPROT)</th>
+                <th>Biological process(GO)</th>
+                <th>Molecular function(GO)</th>
+                <th>Cellular component(GO)</th>
+                <th>PDB ID</th>
+                <th>Interactions (STRING)</th>
+                <th>PROSITE ID</th>
+				<th>Pfam ID</th>
+     </tr>
+     </thead>
+<tbody><tr><td>brca2</td>
+<td>Homo sapiens</td>
+<td><a href="https://www.ncbi.nlm.nih.gov/gene/675">675:BRCA2 DNA repair associated</a><br/></td>
+<td><a href="https://www.ncbi.gov/nuccore/NM_000059.3">NM_000059.3</a><br/></td>
+<td><a href="https://www.ncbi.gov/protein/NP_000050.2">NP_000050.2</a><br/></td>
+<td><a href="https://www.genome.jp/dbget-bin/www_bget?hsa:675">hsa:675</a></td>
+<td><a href="www.genome.jp/kegg-bin/show_pathway?hsa03440">hsa03440:Homologous recombination - Homo sapiens (human) </a><br/>
+<a href="www.genome.jp/kegg-bin/show_pathway?hsa03460">hsa03460:Fanconi anemia pathway - Homo sapiens (human) </a><br/>
+<a href="www.genome.jp/kegg-bin/show_pathway?hsa05200">hsa05200:Pathways in cancer - Homo sapiens (human) </a><br/>
+<a href="www.genome.jp/kegg-bin/show_pathway?hsa05212">hsa05212:Pancreatic cancer - Homo sapiens (human) </a><br/>
+<a href="www.genome.jp/kegg-bin/show_pathway?hsa05224">hsa05224:Breast cancer - Homo sapiens (human) </a><br/>
+</td>
+<td><a href="www.ensembl.org/Homo sapiens/Gene/Summary?db=core;g=ENSG00000139618">ENSG00000139618</a><br/><a href="www.ensembl.org/Homo sapiens/Gene/Summary?db=core;g=LRG_293">LRG_293</a><br/></td>
+<td><a href="www.ensembl.org/Homo sapiens/Transcript/Summary?db=core;t=ENST00000544455">ENST00000544455</a><br/><a href="www.ensembl.org/Homo sapiens/Transcript/Summary?db=core;t=ENST00000380152">ENST00000380152</a><br/></td>
+<td><a href="www.ensembl.org/Homo sapiens/Transcript/ProteinSummary?db=core;p=ENSP00000439902">ENSP00000439902</a><br/><a href="www.ensembl.org/Homo sapiens/Transcript/ProteinSummary?db=core;p=ENSP00000369497">ENSP00000369497</a><br/></td>
+<td><a href="www.uniprot.org/uniprot/P51587">P51587:Breast cancer type 2 susceptibility protein </a><br/><a href="www.uniprot.org/uniprot/A0A386IPV8">A0A386IPV8:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IN23">A0A386IN23:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPJ4">A0A386IPJ4:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IP96">A0A386IP96:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A1YBP1">A1YBP1:Breast and ovarian cancer susceptibility protein 2 truncated variant</a><br/><a href="www.uniprot.org/uniprot/A0A386IPY1">A0A386IPY1:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386INM2">A0A386INM2:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IN22">A0A386IN22:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IQ54">A0A386IQ54:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPV5">A0A386IPV5:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IQ50">A0A386IQ50:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386INL2">A0A386INL2:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPH8">A0A386IPH8:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPV4">A0A386IPV4:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPY0">A0A386IPY0:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IP85">A0A386IP85:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IN16">A0A386IN16:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IN15">A0A386IN15:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPI4">A0A386IPI4:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPX8">A0A386IPX8:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386INK6">A0A386INK6:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IP91">A0A386IP91:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPV2">A0A386IPV2:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IQ46">A0A386IQ46:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IN02">A0A386IN02:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386ING3">A0A386ING3:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IP79">A0A386IP79:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPV3">A0A386IPV3:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPX7">A0A386IPX7:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPH1">A0A386IPH1:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386INF6">A0A386INF6:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IND4">A0A386IND4:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPV6">A0A386IPV6:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IN05">A0A386IN05:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386INE3">A0A386INE3:Truncated breast and ovarian cancer susceptibility protein 2</a><br/><a href="www.uniprot.org/uniprot/A0A386IPV1">A0A386IPV1:Truncated breast and ovarian cancer susceptibility protein 2</a><br/></td>
+<td>double-strand break repair<br/>mitotic recombination-dependent replication fork processing<br/>nucleotide-excision repair<br/>DNA repair<br/>double-strand break repair via homologous recombination<br/>histone H4 acetylation<br/>negative regulation of mammary gland epithelial cell proliferation<br/>centrosome duplication<br/>establishment of protein localization to telomere<br/>histone H3 acetylation<br/>positive regulation of transcription, DNA-templated<br/></td>
+<td>gamma-tubulin binding<br/>H4 histone acetyltransferase activity<br/>protein binding<br/>H3 histone acetyltransferase activity<br/></td>
+<td>BRCA2-MAGE-D1 complex<br/>secretory granule<br/>centrosome<br/>nucleus<br/>nuclear chromosome, telomeric region<br/>protein-containing complex<br/></td>
+<td><a href="www.rcsb.org/structure/1">1N0W:Crystal structure of a RAD51-BRCA2 BRC repeat complex</a><br/><a href="www.rcsb.org/structure/N">3EU7:Crystal Structure of a PALB2 / BRCA2 complex</a><br/></td>
+<td><a href="https://string-db.org/api/image/network?identifiers=P51587">P51587:Network </a><br/></td>
+<td>No data available yet</td><td><a href="pfam.xfam.org/protein/PF00634">PF00634:BRCA2</a><br/><a href="pfam.xfam.org/protein/PF09103">PF09103:BRCA-2_OB1</a><br/><a href="pfam.xfam.org/protein/PF09104">PF09104:BRCA-2_OB3</a><br/><a href="pfam.xfam.org/protein/PF09121">PF09121:Tower</a><br/><a href="pfam.xfam.org/protein/PF09169">PF09169:BRCA-2_helical</a><br/></td>
+</tr></tbody>
+</table>
+</body>
+</html>
