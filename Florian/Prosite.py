@@ -1,6 +1,8 @@
 import requests
 
 def Prosite(UniprotID,file):
+
+	print("Prosite...")
 	file.write("<td>")
 	prosite_url = "https://prosite.expasy.org/cgi-bin/prosite/PSScan.cgi?seq={}".format(UniprotID)
 	r = requests.get(prosite_url + "&output=json")
@@ -17,5 +19,6 @@ def Prosite(UniprotID,file):
 		file.write("<br><span class='btn btn-light border border-light text-light rounded-0'>|</span><br>")
 		file.write(tag_Prosite_url)
 		i+=1
+	file.write("<br><span class='btn btn-light border border-light text-light rounded-0'>|</span><br>")
 	file.write("<a href='{}'>view</a>".format(prosite_url))
 	file.write("</td>")

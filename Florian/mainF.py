@@ -21,6 +21,8 @@ def mainF(windows, data, result, txt):
 
 	lines = data.splitlines()
 	for line in lines:
+		print("------------------------- Gene suivant -----------------------------")
+
 		line = line.replace(" ", "_") #penser a gerer l'espace a la fin du premier Homo_sapiens
 		GeneSymbolAndSpecie =  line.split("\t")
 		GeneSymbol = GeneSymbolAndSpecie[0]
@@ -52,7 +54,7 @@ def mainF(windows, data, result, txt):
 		
 		result.write("</tr>")
 		
-		print("------------------------- Gene suivant -----------------------------")
+		
 		
 		arbitraryValue += 100  
 		#if truc < len(lines):
@@ -61,7 +63,7 @@ def mainF(windows, data, result, txt):
 		txt.tag_config("start", foreground="red")
 		txt.update()
 		truc+=1
-
+	print("------------------------- Fin du processus -----------------------------")
 	t2="{}.60".format(truc+1)
 	txt.tag_add("start", "1.0", t2)
 	txt.tag_config("start", foreground="#47ADA0")

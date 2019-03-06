@@ -1,7 +1,7 @@
 import requests, sys
 
 def qGO(UniprotID, file, geneCount):
-
+	print("qGO...")
 	bioProcess = []
 	molFunction = []
 	cellComponent = []
@@ -31,7 +31,6 @@ def qGO(UniprotID, file, geneCount):
 				cellComponent.append(goName)		
 
 		i+=1
-	print(bioProcess,molFunction,cellComponent)
 
 	listAnnotations = [bioProcess, molFunction, cellComponent]
 	elementCount = 0 + geneCount

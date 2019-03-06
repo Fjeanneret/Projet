@@ -2,6 +2,7 @@ import requests
 
 
 def interactionNetwork(UniprotID,file):
+	print("qGO...")
 	file.write("<td>")
 	r = requests.get("https://string-db.org/api/image/network?identifiers={}".format(UniprotID))
 
@@ -10,7 +11,7 @@ def interactionNetwork(UniprotID,file):
 
 	else : 
 		String_url = "https://string-db.org/api/image/network?identifiers={}".format(UniprotID)
-		tag_String_url = """<iframe src='{}' height='30%' width='80%' scrolling="no" frameborder="0">
+		tag_String_url = """<iframe src='{}' scrolling="no" frameborder="0">
 		</iframe><h3><a class='card-header' href={}>
 		<i class='fa fa-search-plus  text-danger'></i>
 		</a></h3><br>""".format(String_url, String_url)

@@ -2,7 +2,7 @@ import requests, re
 
 def Pfam(UniprotID,file):
 	# http://pfam.xfam.org/protein/P51587?#proteinStructureBlock
-
+	print("Pfam...")
 	file.write("<td>")
 	url = "http://pfam.xfam.org/protein/{}".format(UniprotID)
 	r = requests.get(url + '?output=xml')
@@ -22,7 +22,7 @@ def Pfam(UniprotID,file):
 
 			else :
 				if cpt > 2 :
-					tag_PFAM_url = """"<a href='{}' class='btn btn-info rounded-pill'>
+					tag_PFAM_url = """<a href='{}' class='btn btn-info rounded-pill'>
 					{}<span class='badge badge-pill badge-light'>
 					{}</span></a>""".format(PFAM_url,IDonly, cpt)
 				

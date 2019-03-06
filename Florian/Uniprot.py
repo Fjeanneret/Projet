@@ -20,7 +20,8 @@ def proteinName_ID(Species,GeneSymbols,file):
 	"""
 	Get first PDB ID of protein with Gene Symbol and Specie
 	"""
-	secondariesNames = []
+
+	print("Uniprot...")
 
 	r = requests.get("""https://www.uniprot.org/uniprot/?query=organism:{}+gene_exact:{}&
 	reviewed:yes&columns=id,protein%20names&format=tab""".format(Species,GeneSymbols))

@@ -3,7 +3,7 @@ import requests, re
 def kegg(NCBI_ID, file):
 
 	
-	#import requests, re
+	print("KEGG...")
 
 	# KEGG ID fetching
 	KEGG_fetching_url = "http://rest.kegg.jp/conv/genes/ncbi-geneid:{}".format(NCBI_ID)
