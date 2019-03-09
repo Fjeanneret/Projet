@@ -11,6 +11,7 @@ from Damien.mainD import *
 ## button functions
 player =""
 
+
 def Parcourir():
 	FileName = askopenfilename(title="Ouvrir votre document",filetypes=[('txt files','.txt'),('all files','.*')])
 	openedFile = open(FileName)
