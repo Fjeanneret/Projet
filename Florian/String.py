@@ -2,7 +2,7 @@ import requests
 
 
 def interactionNetwork(UniprotID,file):
-	print("qGO...")
+	print("STRING...")
 	file.write("<td>")
 	r = requests.get("https://string-db.org/api/image/network?identifiers={}".format(UniprotID))
 

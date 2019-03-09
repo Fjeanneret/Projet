@@ -11,19 +11,35 @@ from Florian.String import *
 from tkinter import *
 from tkinter.filedialog import *
 
-	
-def mainF(windows, data, result, txt):
 
-	truc = 1
-	arbitraryValue = 0
-	GeneSymbols = []
-	Species=[]
+def progressState(txt, widgetTextLines, state):
+	"""
+	Show beside gene symbol and specie line state of fetching
+	"""
+	
+	lineIndex = "{}.end".format(widgetTextLines)
+	txt.tag_config("Current", foreground="green")
+	txt.insert(lineIndex, state, ('Current'))
+	txt.update()	
+	txt.delete("%s.first" % 'Current', "%s.last" % 'Current' ) 
+
+
+def mainF(windows, data, result, txt):
+	"""
+	Parsing of data given in input to use gene symbol and specie names
+	and call of annontation fetching functions
+	"""
+
+	widgetTextLines = 1
+	collapseValue = 0
+
+
 
 	lines = data.splitlines()
 	for line in lines:
-		print("------------------------- Gene suivant -----------------------------")
+		print("\n------------------------- Gene suivant -----------------------------\n")
 
-		line = line.replace(" ", "_") #penser a gerer l'espace a la fin du premier Homo_sapiens
+		line = line.rstrip(' ').replace(" ", "_")
 		GeneSymbolAndSpecie =  line.split("\t")
 		GeneSymbol = GeneSymbolAndSpecie[0]
 		Specie = GeneSymbolAndSpecie[1]
@@ -35,35 +51,52 @@ def mainF(windows, data, result, txt):
 		# extractions des annotations
 
 		# Start with EnsEMBL
-		genesList =  geneID_fetch(Specie,GeneSymbol,result)	
-		TranscriptID_ProtID_fetch(Specie, genesList,result)
+		progressState(txt, widgetTextLines, ' EnsEMBL...',)
 
-		# Start with NCBI"""
-		NCBI_geneID = NCBIFetcher(Specie,GeneSymbol,result)
+		genesList =  geneID_fetch(Specie, GeneSymbol, result, txt)	
+		TranscriptID_ProtID_fetch(Specie, genesList, result)
+
+		# Start with NCBI
+		progressState(txt, widgetTextLines, ' NCBI...')
+		NCBI_geneID = NCBIFetcher(Specie, GeneSymbol, result)
+
+		progressState(txt, widgetTextLines, ' Refseq...')
 		RefseqFetcher(NCBI_geneID, Specie, GeneSymbol, result)
-		kegg(NCBI_geneID,result)
+
+		progressState(txt, widgetTextLines, ' KEGG...')
+		kegg(NCBI_geneID, result)
 
 		# Start with Uniprot
-		UniprotID = proteinName_ID(Specie,GeneSymbol,result)
-		PDB_ID(UniprotID,result)
+		progressState(txt, widgetTextLines, ' Uniprot...')
+		UniprotID = proteinName_ID(Specie, GeneSymbol, result)
 
-		qGO(UniprotID, result, arbitraryValue)
-		interactionNetwork(UniprotID,result)
-		Pfam(UniprotID,result)
-		Prosite(UniprotID,result)
+		progressState(txt, widgetTextLines, ' PDB...')
+		PDB_ID(UniprotID, result)
+
+		progressState(txt, widgetTextLines, ' GO...')
+		qGO(UniprotID, result, collapseValue)
+
+		progressState(txt, widgetTextLines, ' STRING...')
+		interactionNetwork(UniprotID, result)
+
+		progressState(txt, widgetTextLines, ' Pfam...')
+		Pfam(UniprotID, result)
+
+		progressState(txt, widgetTextLines, ' Prosite...')
+		Prosite(UniprotID, result)
 		
 		result.write("</tr>")
 		
-		
-		
-		arbitraryValue += 100  
-		#if truc < len(lines):
-		t2="{}.60".format(truc)
-		txt.tag_add("start", "1.0", t2)
-		txt.tag_config("start", foreground="red")
+		collapseValue += 100 # Using of unique identifier for collapse buttons
+
+		# Progress visualiqation in text widget
+		lineIndex = "{}.60".format(widgetTextLines)
+		txt.tag_add("start", "1.0", lineIndex) 
+		txt.tag_config("start", foreground="blue") # gene and specie text in red if fetching finished
 		txt.update()
-		truc+=1
-	print("------------------------- Fin du processus -----------------------------")
-	t2="{}.60".format(truc+1)
-	txt.tag_add("start", "1.0", t2)
-	txt.tag_config("start", foreground="#47ADA0")
+		widgetTextLines+=1
+	
+	txt.configure(foreground='#47ADA0') # gene and specie text in blue if entire fetching finished
+
+
+	print("\n------------------------- Fin du processus -----------------------------\n")

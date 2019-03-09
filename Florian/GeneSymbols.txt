@@ -1,4 +1,4 @@
-brca2	Homo sapiens
+brca2	Homo sapiens 
 sms-2	Caenorhabditis elegans
 col1a1	mus musculus
 RAD51	homo sapiens

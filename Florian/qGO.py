@@ -1,12 +1,18 @@
 import requests, sys
 
 def qGO(UniprotID, file, geneCount):
+	"""
+	Get biological process, molecular function and cellular component
+	 Gene Ontology information
+	"""
+
 	print("qGO...")
 	bioProcess = []
 	molFunction = []
 	cellComponent = []
 
-	requestURL = """https://www.ebi.ac.uk/QuickGO/services/annotation/search?includeFields=goName&geneProductId={}""".format(UniprotID)
+	requestURL = """https://www.ebi.ac.uk/QuickGO/services/annotation/
+	search?includeFields=goName&geneProductId={}""".format(UniprotID)
 	r = requests.get(requestURL, headers={ "Accept" : "application/json"})
 
 	if not r.ok:
@@ -14,13 +20,11 @@ def qGO(UniprotID, file, geneCount):
 	else: 
 		d = r.json()
 	i=0
-	#print(d)
-	#print(d["results"])
+
 	while i < len(d["results"]):
 		goName = d["results"][i]["goName"]
 		
 		if d["results"][i]["goAspect"] == "biological_process":
-			#a = d["results"][i]["goId"]
 			if goName not in bioProcess:
 				bioProcess.append(goName)
 		elif d["results"][i]["goAspect"] == "molecular_function":
@@ -29,11 +33,10 @@ def qGO(UniprotID, file, geneCount):
 		elif d["results"][i]["goAspect"] == "cellular_component":
 			if goName not in cellComponent:
 				cellComponent.append(goName)		
-
 		i+=1
 
 	listAnnotations = [bioProcess, molFunction, cellComponent]
-	elementCount = 0 + geneCount
+	collapseValue = 0 + geneCount
 	for annotation in listAnnotations:
 
 		file.write("<td><ul class='list-group'>")
@@ -45,26 +48,24 @@ def qGO(UniprotID, file, geneCount):
 							<span class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse{}" aria-expanded="false" aria-controls="collapse{}">
 	    						<i class="fas fa-plus">  </i>  <span class='badge badge-light'>{}</span>
 							</span></p>
-					""".format(first_element, elementCount, elementCount, len(annotation))
+					""".format(first_element, collapseValue, collapseValue, len(annotation))
 			
 			file.write(tag_go)
-			file.write("<div class='collapse' id='collapse{}'>".format(elementCount))
+			file.write("<div class='collapse' id='collapse{}'>".format(collapseValue))
 			for element in annotation:
 				tag_go = """
-						
-		 					
 		    					<span  class='list-group-item text-muted bg-light#'>{}</span>
 							""".format(element)
 
 				#tag_go = """<span  class='list-group-item text-muted bg-light
 				#'>{}</span>""".format(element)
 				file.write(tag_go)
-			elementCount +=1
+			collapseValue +=1
 			file.write("</div>")
 		elif len(annotation)==1:
 			file.write("<span  class='list-group-item text-muted bg-light#'>{}</span>".format(annotation[0]))
-			elementCount +=1
+			collapseValue +=1
 		else : 
-			elementCount +=1
+			collapseValue +=1
 
 		file.write("</ul></td>")
