@@ -40,7 +40,7 @@ def NCBIorthologsTest(NCBI_ID):
 	return orthologsExist
 
 
-def NCBIFetcher(Species,GeneSymbols,file):
+def NCBIFetcher(Species, GeneSymbols, file):
 	"""
 	Get gene EnsEMBL ID with genesymbol and specie
 	"""
@@ -53,9 +53,9 @@ def NCBIFetcher(Species,GeneSymbols,file):
 	ID_response = requests.get(APIserver+tool, headers={ "Content-Type" : "application/json"})
 
 	if ID_response.ok:
-		NCBI_ID = ID_response.json()["esearchresult"]["idlist"][0] #>e take the first NCBI ID, the most relevant
+		NCBI_ID = ID_response.json()["esearchresult"]["idlist"][0] # we take the first NCBI ID, the most relevant
 
-		# Get complete name of gene
+		# get complete name of gene
 		tool = "esummary.fcgi?db=gene&id={}&retmode=json".format(NCBI_ID)
 		Summary_response = requests.get(APIserver+tool, headers={ "Content-Type" : "application/json"})
 
@@ -77,10 +77,13 @@ def NCBIFetcher(Species,GeneSymbols,file):
 		tagGeneSummary_url = "<a class='card-header' href={}>{}</a><br>".format(geneSummary_url,NCBI_ID)
 
 		# genome viewer url and tag
-		Location_url = "https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?context=gene&acc={}".format(NCBI_ID)
-		tagLocation_url = "<a class='btn btn-info' href={}>{}</a><br>".format(Location_url, "genomeViewer")
+		ensembl_Location_url = "https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?context=gene&acc={}".format(NCBI_ID)
+		ucsc_url = "http://genome.ucsc.edu/cgi-bin/hgTracks?org={}&position={}".format(Species, NCBI_ID)
+		tagGenomeViewer_url = """<a class='btn btn-info' href={}>{}</a>
+		<a class='btn btn-success' href={}>{}</a><br>""".format(ensembl_Location_url, "NCBI Viewer", ucsc_url, "UCSC Viewer")
 
-		bootstrap(tagGeneSummary_url,tagLocation_url,tagOrtholog_url, CompleteGeneName, file)
+
+		bootstrap(tagGeneSummary_url,tagGenomeViewer_url,tagOrtholog_url, CompleteGeneName, file)
 
 	else :
 
@@ -93,6 +96,7 @@ def RefseqFetcher(NCBI_ID, Species, GeneSymbols, file):
 	"""
 	Get Transcript and protein Refseq ID
 	"""
+	print("Refseq...")
 
 	# API request to have a json gene ID file
 	APIserver = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"

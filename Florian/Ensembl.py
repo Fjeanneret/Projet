@@ -38,6 +38,7 @@ def dataFetchingRequest(ext):
 	if not r.ok:
 		server = "https://rest.ensemblgenomes.org"
 		r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
+
 	data = r.json()
 
 	return data
@@ -52,18 +53,18 @@ def orthologsTest(geneID):
 
 	orthologsExist = None
 
-	# Make homology list request
+	# make homology list request
 	request = "https://rest.ensembl.org/homology/id/{}?format=condensed;type=orthologues&content-type=application/json".format(geneID)
 	data = requests.get(request, headers={ "Content-Type" : "application/json"}) 
 	data = data.json()
 
-	if len(data["data"]) == 0: #could be in ensemblgenomes server
+	if len(data["data"]) == 0: # could be in ensemblgenomes server
 		request = "https://rest.ensemblgenomes.org/homology/id/{}?format=condensed;type=orthologues&content-type=application/json".format(geneID)
 		data = requests.get(request, headers={ "Content-Type" : "application/json"}) 
 		data = data.json()
 	
 	indexTest = data["data"][0]["homologies"]
-	if len(indexTest): #if the JSON content is not null we have ortholog information 
+	if len(indexTest): # if the JSON content is not null we have ortholog information 
 		orthologsExist = True
 
 	return orthologsExist
@@ -77,10 +78,11 @@ def EnsEMBL_database(Species, geneID, urlTarget):
 	dbList = ["www","plants","fungi","Bacteria","Protists","Metazoa"]
 
 	for dataBase in dbList:
-		# Summary url let to test if page exists, in case of 404 error another database is tested
+
+		# summary url let to test if page exists, in case of 404 error another database is tested
 		geneSummary_url = "https://{}.ensembl.org/{}/Gene/Summary?db=core;g={};".format(dataBase,Species, geneID)
 		r = requests.get(geneSummary_url, headers = {"Content-Type" : "application/json"})
-		if r.ok: break # If database is correct, iteration is broken
+		if r.ok: break # if database is correct, iteration is broken
 
 	urlBase = "https://{}.ensembl.org/{}/".format(dataBase, Species)
 	url = urlBase + urlTarget
@@ -141,12 +143,14 @@ def geneID_fetch(Species, GeneSymbols, file, txt):
 	
 	file.write("<td>")
 
-	while i<len(geneData):
-		geneID = geneData[i]["id"]
-		genesList.append(geneID)	 
-		EnsEMBL_url_building(Species,geneID,file)
-		i+=1
-
+	if geneData[i]["id"]: # in case of request error, this does not exist
+		while i<len(geneData):
+			geneID = geneData[i]["id"]
+			genesList.append(geneID)	 
+			EnsEMBL_url_building(Species,geneID,file)
+			i+=1
+	else : file.write("request error")
+	
 	file.write("</td>")
 
 	return genesList
@@ -166,6 +170,8 @@ def TranscriptID_ProtID_fetch(Species, geneIDs,file):
 	file.write("<td><ul class='list-group'>")
 
 	for geneID in geneIDs:
+
+		# API request for transcripts and protein information
 		ext = "/lookup/id/{}?expand=1".format(geneID)
 		dataGet = dataFetchingRequest(ext)
 

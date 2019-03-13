@@ -6,7 +6,7 @@ from Morgane.mainM import *
 from Florian.mainF import *
 from Damien.mainD import *
 
-		
+
 	
 ## button functions
 player =""
