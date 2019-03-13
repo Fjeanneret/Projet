@@ -2,8 +2,13 @@ import requests
 
 
 def interactionNetwork(UniprotID,file):
+	'''
+	Get interaction network picture with STRING
+	showing with a iframe and linking to the web page	
+	'''
+
 	print("STRING...")
-	file.write("<td>")
+	file.write("<td>") 
 	r = requests.get("https://string-db.org/api/image/network?identifiers={}".format(UniprotID))
 
 	if not r.ok: 

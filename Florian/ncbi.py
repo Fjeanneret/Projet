@@ -3,7 +3,7 @@ import requests, re
 def bootstrap(summary,viewer,ortho, geneName, file):
 	"""
 	Add bootstrap element to enhance form and write 
-	in table file
+	in table file and writing card in table 
 	"""
 
 	case = """
@@ -25,17 +25,17 @@ def bootstrap(summary,viewer,ortho, geneName, file):
 
 def NCBIorthologsTest(NCBI_ID):
 	"""
-
+	Test if orthologs exist and return True in this case
 	"""
 
 	orthologsExist = None
+	# API request
 	APIserver = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 	NMtool = "esearch.fcgi?db=GENE&term=ortholog_gene_{}[group]&retmode=json".format(NCBI_ID)
 	Orthologs_response = requests.get(APIserver+NMtool, headers={ "Content-Type" : "application/json"})
 
 	if len(Orthologs_response.json()["esearchresult"]["idlist"]) != 0:	
 		orthologsExist = True
-		#ecrire url dans card
 
 	return orthologsExist
 
@@ -44,18 +44,20 @@ def NCBIFetcher(Species,GeneSymbols,file):
 	"""
 	Get gene EnsEMBL ID with genesymbol and specie
 	"""
+
 	print("NCBI...")
+
+	# API request
 	APIserver = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 	tool = "esearch.fcgi?db=gene&term={}[ORGN]+{}[GENE]&idtype=acc&retmode=json".format(Species,GeneSymbols) #get JSON
 	ID_response = requests.get(APIserver+tool, headers={ "Content-Type" : "application/json"})
 
 	if ID_response.ok:
-		NCBI_ID = ID_response.json()["esearchresult"]["idlist"][0] #0 only ? # NCBI ID at ["esearchresult"]["idlist"][0] index
+		NCBI_ID = ID_response.json()["esearchresult"]["idlist"][0] #>e take the first NCBI ID, the most relevant
 
 		# Get complete name of gene
 		tool = "esummary.fcgi?db=gene&id={}&retmode=json".format(NCBI_ID)
 		Summary_response = requests.get(APIserver+tool, headers={ "Content-Type" : "application/json"})
-
 
 		if Summary_response.ok:
 			CompleteGeneName = Summary_response.json()["result"][NCBI_ID]["nomenclaturename"]
@@ -63,8 +65,9 @@ def NCBIFetcher(Species,GeneSymbols,file):
 		else : CompleteGeneName = " no name found"
 
 		if NCBIorthologsTest(NCBI_ID) == True :
-			Ortholog_url = "https://www.ncbi.nlm.nih.gov/gene/?Term=ortholog_gene_675[group]"
+			Ortholog_url = "https://www.ncbi.nlm.nih.gov/gene/?Term=ortholog_gene_{}[group]".format(NCBI_ID)
 			tagOrtholog_url = "<a class='btn btn-warning' href={}>Liste des orthologues</a><br>".format(Ortholog_url)
+		
 		else : 
 			ortholog_url = ""
 			tagOrtholog_url = "Pas d'orthologues\n"
@@ -91,6 +94,7 @@ def RefseqFetcher(NCBI_ID, Species, GeneSymbols, file):
 	Get Transcript and protein Refseq ID
 	"""
 
+	# API request to have a json gene ID file
 	APIserver = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 	NMtool = "esearch.fcgi?db=nucleotide&term=homo_sapiens[ORGN]+brca2[GENE]&idtype=acc&retmode=json".format(Species,GeneSymbols) #get id
 	Transcripts_response = requests.get(APIserver+NMtool, headers={ "Content-Type" : "application/json"})
@@ -98,6 +102,7 @@ def RefseqFetcher(NCBI_ID, Species, GeneSymbols, file):
 	file.write("<td>")
 	if Transcripts_response.ok:
 		list_ID = Transcripts_response.json()["esearchresult"]["idlist"] 
+
 		for ID in list_ID:
 			if "NM" in ID:
 				Transcript_url = "https://www.ncbi.nlm.nih.gov/nuccore/{}".format(ID)
@@ -105,17 +110,20 @@ def RefseqFetcher(NCBI_ID, Species, GeneSymbols, file):
 				file.write(tagTranscript_url)
 
 	file.write("</td>")
-	
+
+	# API request to have a json protein ID file
 	NPtool = "esearch.fcgi?db=protein&term=homo_sapiens[ORGN]+brca2[GENE]&idtype=acc&retmode=json".format(Species,GeneSymbols)
 	Proteins_response = requests.get(APIserver+NPtool, headers={ "Content-Type" : "application/json"})
 
 	file.write("<td>")
 	if Proteins_response.ok:
 		list_ID = Proteins_response.json()["esearchresult"]["idlist"] 
+
 		for proteinID in list_ID:
-			if "P" in proteinID:
+			if "P" in proteinID: # we esteem PXXXX as relevant protein ID
 				Protein_url = "https://www.ncbi.nlm.nih.gov/protein/{}".format(proteinID)
 				tagProtein_url = "<a class='list-group-item' href='{}'>{}</a>".format(Protein_url, proteinID)
 				file.write(tagProtein_url)
+
 	else : file.write("no protein data")
 	file.write("</td>")
